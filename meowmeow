@@ -1,0 +1,127 @@
+CREATE VIEW StudentDoNotDateInBooks AS
+
+SELECT Student.first_name + ' ' + Student.last_name as 'Студент', Book.[Name] as 'Книга', S_Cards.date_in as 'Дата возврата'
+
+FROM S_Cards
+
+JOIN Student ON S_Cards.id_student = Student.id
+
+JOIN Book ON S_Cards.id_book = Book.id
+
+WHERE S_Cards.date_in IS NULL
+
+GO
+
+
+SELECT *
+
+FROM StudentDoNotDateInBooks
+
+GO
+
+
+
+CREATE VIEW StudentDoNotGoBooks AS
+
+SELECT Student.id as 'ID', Student.first_name + ' ' + Student.last_name as 'Студент'
+
+FROM Student
+
+EXCEPT
+
+SELECT Student.id as 'ID', Student.first_name + ' ' + Student.last_name as 'Студент'
+
+FROM S_Cards
+
+JOIN Student ON S_Cards.id_student = Student.id
+
+GO
+
+
+SELECT *
+
+FROM StudentDoNotGoBooks
+
+GO
+
+
+
+CREATE VIEW StatisticsOnT_Cards AS
+
+SELECT T_Cards.id_librarian, COUNT(*) as 'quantity date in book'
+
+FROM T_Cards
+
+GROUP BY id_librarian
+
+GO
+
+
+CREATE VIEW StatisticsOnS_Cards AS
+
+SELECT S_Cards.id_librarian, COUNT(*) as 'quantity date in book'
+
+FROM S_Cards
+
+GROUP BY id_librarian
+
+GO
+
+
+CREATE VIEW StatisticsOnAllCards AS
+
+SELECT StatisticsOnT_Cards.id_librarian, CAST((StatisticsOnT_Cards.[quantity date in book] + StatisticsOnSS_Cards.[quantity date in book]) as int) as 'quantity date in book'
+
+FROM StatisticsOnT_Cards
+
+JOIN StatisticsOnSS_Cards ON StatisticsOnT_Cards.id_librarian = StatisticsOnSS_Cards.id_librarian
+
+GO
+
+
+SELECT Librarian.first_name + ' ' + Librarian.last_name as 'Librarian', StatisticsOnAllCards.[quantity date in book]
+
+FROM Librarian
+
+JOIN StatisticsOnAllCards ON StatisticsOnAllCards.id_librarian = Librarian.id
+
+
+
+CREATE VIEW StatisticsOnT_Cards AS
+
+SELECT T_Cards.id_librarian, COUNT(*) as 'quantity date in book'
+
+FROM T_Cards
+
+GROUP BY id_librarian
+
+GO
+
+
+CREATE VIEW StatisticsOnS_Cards AS
+
+SELECT S_Cards.id_librarian, COUNT(*) as 'quantity date in book'
+
+FROM S_Cards
+
+GROUP BY id_librarian
+
+GO
+
+
+CREATE VIEW StatisticsOnAllCards AS
+
+SELECT StatisticsOnTT_Cards.id_librarian, CAST((StatisticsOnT_Cards.[quantity date in book] + StatisticsOnS_Cards.[quantity date in book]) as int) as 'quantity date in book'
+
+FROM StatisticsOnT_Cards
+
+JOIN StatisticsOnS_Cards ON StatisticsOnT_Cards.id_librarian = StatisticsOnS_Cards.id_librarian
+
+GO
+
+
+SELECT Librarian.first_name + ' ' + Librarian.last_name as 'Librarian', StatisticsOnAllCards.[quantity date in book]
+
+FROM Librarian
+
+JOIN StatisticsOnAllCards ON StatisticsOnAllCards.id_librarian = Librarian.id
