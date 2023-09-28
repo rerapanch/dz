@@ -1,0 +1,56 @@
+1 zadanie)
+DECLARE @str VARCHAR(100) 
+SET @str = ‘дед’ 
+SET @str = REPLACE(@str, ’ ', ‘’) 
+SET @str = LOWER(@str) 
+DECLARE @result BIT  
+SET @result = 1 
+DECLARE @start INT, @end INT 
+SET @start = 1 SET @end = LEN(@str) 
+WHILE 
+@start < @end 
+BEGIN 
+IF 
+SUBSTRING(@str, @start, 1) <> SUBSTRING(@str, @end, 1) 
+BEGIN 
+SET @result = 0
+BREAK 
+END 
+SET @start = @start + 1 SET @end = @end - 1 END 
+IF 
+@result = 1 PRINT ‘Строка "’ + @str + ‘" является палиндромом’ 
+ELSE 
+PRINT ‘Строка "’ + @str + ‘" не является палиндромом’
+
+2 zadanie)
+DECLARE @str VARCHAR(100), @word VARCHAR(20) 
+SET @str = ‘Александр, так любит шаурму, что готов есть шаурму каждый день шаурму ’ SET @word = ‘шаурму’ 
+DECLARE @result INT 
+SET @result = 0 
+DECLARE @pos INT 
+SET @pos = 1 
+WHILE 
+@pos <> 0 
+BEGIN 
+SET @pos = CHARINDEX(@word, @str, @pos) 
+IF @pos <> 0 
+BEGIN 
+SET @result = @result + 1 
+SET @pos = @pos + LEN(@word) 
+END
+END  
+PRINT ‘Слово "’ + @word + ‘" содержится в строке "’ + @str + ‘" ’ + CAST(@result AS VARCHAR) + ’ раз(а)’
+
+3 zadanie)
+DECLARE @str NVARCHAR(50) 
+SET @str = ‘buy ViAgRA now’ – это спам! 
+SET @str = LOWER(@str) 
+DECLARE @result BIT 
+SET @result = 0 
+IF 
+@str LIKE ‘%viagra%’ OR @str LIKE ‘%ХХХ%’ SET @result = 1
+IF 
+@result = 1 
+PRINT ‘Это спам’ 
+ELSE 
+PRINT ‘Это не спам’
