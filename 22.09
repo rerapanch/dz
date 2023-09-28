@@ -1,0 +1,59 @@
+1 zadanie) 
+DECLARE @L INT;
+SET @L = 30;
+SELECT REPLICATE('*', @L);
+
+-- Результат:
+-- ******
+
+2 zadanie) 
+DECLARE @number INT
+DECLARE @firstHalfSum INT;
+DECLARE @secondHalfSum INT;
+
+SELECT @number = 0;
+
+WHILE @number <= 999999
+BEGIN
+SET  @firstHalfSum = FLOOR(@number / 1000) + (FLOOR(@number / 100) % 10) + (FLOOR(@number / 10) % 10);
+SET @secondHalfSum = (@number % 1000) + (@number % 100) + (@number % 10);
+
+IF @firstHalfSum = @secondHalfSum
+BEGIN
+SELECT @number;
+END;
+
+SET @number = @number + 1;
+END;
+
+3 zadanie) 
+CREATE TABLE Numbers (n INT PRIMARY KEY);
+DECLARE @i INT = 3;
+WHILE @i <= 1000000
+BEGIN
+INSERT INTO Numbers VALUES (@i);
+SET @i = @i + 1;
+END;
+
+CREATE TABLE Primes (p INT PRIMARY KEY);
+DECLARE @j INT = 3;
+WHILE @j <= 1000000
+BEGIN
+DECLARE @isPrime BIT = 1;
+DECLARE @k INT = 2;
+WHILE @k < @j
+BEGIN
+IF @j % @k = 0
+BEGIN
+SET @isPrime = 0;
+BREAK;
+END;
+SET @k = @k + 1;
+END;
+IF @isPrime = 1
+BEGIN
+INSERT INTO Primes VALUES (@j);
+END;
+SET @j = @j + 1;
+END;
+SELECT p FROM Primes;
