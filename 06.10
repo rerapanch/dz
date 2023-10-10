@@ -1,0 +1,47 @@
+USE [Library];
+DECLARE @table TABLE (
+    id INT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    role VARCHAR(20),
+    department VARCHAR(20)
+);
+
+DECLARE cur CURSOR FOR 
+SELECT
+   Teacher.first_name,Teacher.last_name,Department.name
+FROM
+   Department
+INNER JOIN Teacher ON Department.id = Teacher.id_department
+UNION ALL
+
+SELECT
+    Student.first_name,Student.last_name,Department.name
+FROM
+  Department
+INNER JOIN Student ON Department.id = Student.id
+INNER JOIN dbo.[Group] ON dbo.Student.id_group = dbo.[Group].id
+WHERE
+    dbo.[Group].id_department = 2; 
+  OPEN cur;
+
+  DECLARE @first_name nvarchar(50)
+  DECLARE @last_name nvarchar(50)
+  DECLARE @department nvarchar(50)
+
+FETCH NEXT FROM cur INTO @first_name, @last_name, @department
+WHILE @@FETCH_STATUS = 0 
+BEGIN
+
+    PRINT 'имя: ' + @first_name + ' ' + @last_name + ', кафедра: ' + @department 
+
+    IF @department = 'Компьютерной графики и дизайна'
+    BEGIN
+
+        PRINT 'Отправить приглашение на защиту курсовых работ которые состоятся 20 декабря в 14 00 ';
+    END
+    FETCH NEXT FROM cur INTO @first_name, @last_name, @department
+END;
+
+CLOSE cur;
+DEALLOCATE cur;
