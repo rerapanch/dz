@@ -1,0 +1,41 @@
+USE [Dating]
+DECLARE @text VARCHAR(MAX)
+DECLARE @word VARCHAR(50)
+DECLARE @space INT
+DECLARE @words TABLE (word VARCHAR(50), frequency INT) 
+DECLARE cur CURSOR FOR 
+SELECT mess FROM messages
+OPEN cur 
+FETCH NEXT 
+FROM cur 
+INTO @text 
+WHILE @@FETCH_STATUS = 0 
+BEGIN 
+SET @text = LOWER(@text)
+SET @text = @text + ' ' 
+SET @space = 1
+WHILE @space > 0 
+BEGIN 
+SET @space = CHARINDEX(' ', @text) 
+IF
+@space > 0 
+SET @word = SUBSTRING(@text, 1, @space - 1) SET @text = SUBSTRING(@text, @space + 1, 
+LEN(@text) - @space) 
+IF 
+LEN(@word) > 0 
+BEGIN 
+IF EXISTS (SELECT * 
+FROM @words WHERE word = @word) 
+UPDATE @words 
+SET frequency = frequency + 1 
+WHERE word = @word 
+ELSE 
+INSERT INTO @words VALUES (@word, 1) 
+END 
+END
+FETCH NEXT 
+FROM cur INTO @text 
+END 
+CLOSE cur
+DEALLOCATE cur 
+SELECT TOP 50 word, frequency FROM @words ORDER BY frequency DESC
