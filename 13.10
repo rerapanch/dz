@@ -1,0 +1,44 @@
+1)
+USE [Dating]
+SELECT user_id, nick + ' ~ ' + CAST(age AS VARCHAR) AS NickAge, sex
+FROM users
+WHERE id_education = 'высшее' AND my_smoke = 'Нет' AND my_drink = 'не курю'
+ORDER BY user_id;
+2)
+USE [Dating]
+SELECT user_id, nick + ' ~ ' + CAST(age AS VARCHAR) AS NickAge, sex
+FROM users
+WHERE ves = 'стройного' AND eyes_color = 'голубые' AND hair_color = 'блонд'
+UNION ALL
+SELECT user_id, nick + ' ~ ' + CAST(Age AS VARCHAR) AS NickAge, Sex
+FROM users
+WHERE ves = 'спортивного' AND eyes_color = 'карие' AND hair_color = 'брюнет'
+UNION ALL
+SELECT COUNT(*), NULL, NULL
+FROM (
+SELECT user_id, nick + ' ~ ' + CAST(age AS VARCHAR) AS NickAge, sex
+FROM users
+WHERE ves = 'стройного' AND eyes_color = 'голубые' AND hair_color = 'блонд'
+UNION ALL
+SELECT user_id, nick + ' ~ ' + CAST(Age AS VARCHAR) AS NickAge, sex
+FROM users
+WHERE ves = 'спортивного' AND eyes_color = 'карие' AND hair_color = 'брюнет'
+) AS Total;
+3)
+USE [Dating]
+SELECT u.user_id, u.nick + ' ~ ' + CAST(u.age AS VARCHAR) AS NickAge, u.sex
+FROM users u
+JOIN Moles M ON u.user_id = M.id
+JOIN Framework F ON U.user_id = F.id
+JOIN Interes I ON u.user_id = i.id
+WHERE F.name = 'информационные технологии' AND M.name = 'пирсинг' AND I.name =
+'а ещё я крестиком вышивать умею'
+ORDER BY user;
+4)
+USE [Dating]
+SELECT richness('хорошо зарабатываю') AS TotalSalary
+FROM users u
+JOIN Languages L ON u.user_id = L.id
+JOIN Interes I ON u.user_id = I.id
+WHERE L.id > 5 AND I.name = 'кулинария, готовка' AND I.id = 'не умею'
+GROUP BY id_education;
