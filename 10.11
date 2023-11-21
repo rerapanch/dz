@@ -1,0 +1,22 @@
+CREATE TRIGGER check_books ON S_Cards
+AFTER INSERT
+AS
+BEGIN
+ -- Получаем номер студенческого билета из вставленной записи
+
+ DECLARE @student_id INT;
+ SELECT @student_id = id_student FROM inserted;
+ -- Считаем, сколько книг взял студент
+
+ DECLARE @book_count INT;
+ SELECT @book_count = COUNT(*) FROM S_Cards
+ WHERE id_student = @student_id AND date_out IS NULL;
+ -- Если книг больше трех, то отменяем вставку и выводим сообщение
+
+ IF @book_count > 3
+ BEGIN
+ ROLLBACK TRANSACTION;
+ RAISERROR ('У вас уже есть 3 невозвращенных книги на руках, поэтому, пока хотя бы
+одна из них не будет возвращена - новые книги не выдаются.', 16, 1);
+ END
+EN
